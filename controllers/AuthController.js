@@ -66,15 +66,16 @@ router.get('/me', function(req, res) {
     });
 });
 
-const login =function(req, res, next) {
+const login = function(req, res, next) {
 
     console.log(req.body);
-    res.send(req.body);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+
+        console.log(errors.isArray());
 
         user.findOne({ phone: req.body.phone }, function (err, user) {
 

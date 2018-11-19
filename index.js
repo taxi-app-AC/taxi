@@ -7,18 +7,14 @@ const path  = require('path');
 const constants = require('./config/constant')
 require('./config/db');
 
-// var AuthController = require('./controllers/AuthController');
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-/*app.use(bodyParser.urlencoded({
-    extended: false
-}));*/
+var routes = require('./routes');
 
-var z = require('./routes/auth');
+routes.init(app);
 
-app.use('/', z);
 
 const logger = winston.createLogger({
     level: 'error',
