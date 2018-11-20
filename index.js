@@ -1,19 +1,18 @@
 const express = require('express');
 const app = express();
 const winston = require('winston');
-const fs = require('fs');
-const path  = require('path');
+const bodyParser = require('body-parser');
 
-const constants = require('./config/constant')
+const constants = require('./config/constant');
+const routes = require('./routes');
+
 require('./config/db');
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./routes');
+// routes.init(app);
 
-routes.init(app);
+app.use(routes);
 
 
 const logger = winston.createLogger({

@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
-const fs = require('fs');
 
 var user = require('../models/User');
 var config = require('../config/constant');
@@ -66,47 +65,44 @@ router.get('/me', function(req, res) {
     });
 });
 
-const login = function(req, res, next) {
+exports.loginRules = () => {
+
+    return [
+        check('phone').exists(),
+        check('password', 'must be min 5 char').isLength({ min: 5 })
+    ];
+}
+
+exports.login = (req, res, next) => {
 
     console.log(req.body);
 
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+    user.findOne({ phone: req.body.phone }, function (err, user) {
+
+        if (err)
+            next(err);
+
+        if (!user)
+            return res.status(404).send('No user found.');
+
+        try {
+
+            var passwordIsValid = bcrypt.compareSynsc(req.body.password, user.password);
+
+            if (!passwordIsValid)
+                return res.status(401).send({ auth: false, token: null });
+
+            var token = jwt.sign({ id: user._id }, config.authSecret, {
+                expiresIn: 86400 // expires in 24 hours
+            });
+
+            res.status(200).send({ auth: true, token: token });
+
+        }
+        catch (error) {
+            // console.log(error.stack);
+            next(error);
         }
 
-        console.log(errors.isArray());
-
-        user.findOne({ phone: req.body.phone }, function (err, user) {
-
-            if (err)
-                next(err);
-
-            if (!user)
-                return res.status(404).send('No user found.');
-
-            try {
-
-                var passwordIsValid = bcrypt.compareSynsc(req.body.password, user.password);
-
-                if (!passwordIsValid)
-                    return res.status(401).send({ auth: false, token: null });
-
-                var token = jwt.sign({ id: user._id }, config.authSecret, {
-                    expiresIn: 86400 // expires in 24 hours
-                });
-
-                res.status(200).send({ auth: true, token: token });
-
-            }
-            catch (error) {
-                // console.log(error.stack);
-                next(error);
-            }
-
-        });
-    }
-
-module.exports = {
-    login: login
-};
+    });
+}

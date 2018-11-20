@@ -1,12 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const auth = require('./auth')
+const app = module.exports = require('express')();
 
-function init(app) {
+app.use('/api/auth', require('./auth'));
 
-    app.use('/api/auth', auth);
-}
-
-module.exports = {
-    init: init
-};
+// the catch all route
+app.all('*', (req, res) => {
+    res.status(404).send({msg: 'not found'});
+});
