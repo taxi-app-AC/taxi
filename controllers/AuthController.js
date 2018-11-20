@@ -11,7 +11,7 @@ var config = require('../config/constant');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-router.post('/register', function(req, res) {
+exports.register = function(req, res) {
 
     let userObj = {
         name: req.body.name,
@@ -47,7 +47,7 @@ router.post('/register', function(req, res) {
 
             return res.status(200).send({ auth: true, token: token });
         });
-});
+};
 
 router.get('/me', function(req, res) {
     var token = req.headers['x-access-token'];
@@ -68,7 +68,7 @@ router.get('/me', function(req, res) {
 exports.loginRules = () => {
 
     return [
-        check('phone').exists(),
+        check('phone', 'Phone is required').exists(),
         check('password', 'must be min 5 char').isLength({ min: 5 })
     ];
 }
@@ -83,11 +83,13 @@ exports.login = (req, res, next) => {
             next(err);
 
         if (!user)
-            return res.status(404).send('No user found.');
+            return res.status(404).send({
+                'msg': 'No user found.'
+            });
 
         try {
 
-            var passwordIsValid = bcrypt.compareSynsc(req.body.password, user.password);
+            var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
             if (!passwordIsValid)
                 return res.status(401).send({ auth: false, token: null });
