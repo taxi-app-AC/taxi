@@ -1,15 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
 
 var user = require('../models/User');
 var config = require('../config/constant');
-
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
 
 exports.register = function(req, res) {
 
