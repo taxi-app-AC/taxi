@@ -102,7 +102,6 @@ exports.login = (req, res, next) => {
 
         }
         catch (error) {
-
             next(error);
         }
 
