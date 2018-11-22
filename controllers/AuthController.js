@@ -28,7 +28,7 @@ exports.register = function(req, res) {
         return res.status(400).send({
             error: {
                 message: error.message
-            }
+            }       
         });
     }
 
