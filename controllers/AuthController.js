@@ -37,7 +37,7 @@ exports.register = function(req, res) {
                 return res.status(500).send("There was a problem registering the user.")
             }
             // create a token
-            var token = jwt.sign({ id: userr._id }, config.authSecret, {
+            var token = jwt.sign({ id: userr._id }, process.env.AUTH_SECRET, {
                 expiresIn: 86400 // expires in 24 hours
             });
 
@@ -49,7 +49,7 @@ router.get('/me', function(req, res) {
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
-    jwt.verify(token, config.authSecret, function(err, decoded) {
+    jwt.verify(token, process.env.AUTH_SECRET, function(err, decoded) {
         if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
         user.findById(decoded.id, {password: 0}, function (err, user) {
@@ -90,7 +90,7 @@ exports.login = (req, res, next) => {
             if (!passwordIsValid)
                 return res.status(401).send({ auth: false, token: null });
 
-            var token = jwt.sign({ id: user._id }, config.authSecret, {
+            var token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, {
                 expiresIn: 86400 // expires in 24 hours
             });
 

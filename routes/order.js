@@ -5,7 +5,7 @@ const { requestValidator } = require('../middlewares/controller');
 var express = require('express');
 var router = express.Router();
 
-router.post('/create',
+router.post('/',
     Order.create
 );
 
