@@ -3,11 +3,13 @@ const app = express();
 const winston = require('winston');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+var helmet = require('helmet');
 
 const constants = require('./config/constant');
 const routes = require('./routes');
 
 require('./config/db');
+app.use(helmet());
 
 app.use(bodyParser.json());
 

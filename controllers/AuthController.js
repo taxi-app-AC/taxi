@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
-const { check, validationResult } = require('express-validator/check');
 
-var user = require('../models/User');
+
+var user = require('../models/user');
 var config = require('../config/constant');
 
 exports.register = function(req, res) {
@@ -60,46 +60,3 @@ router.get('/me', function(req, res) {
         });
     });
 });
-
-exports.loginRules = () => {
-
-    return [
-        check('phone', 'Phone is required').exists(),
-        check('password', 'must be min 5 char').isLength({ min: 5 })
-    ];
-}
-
-exports.login = (req, res, next) => {
-
-    console.log(req.body);
-
-    user.findOne({ phone: req.body.phone }, function (err, user) {
-
-        if (err)
-            next(err);
-
-        if (!user)
-            return res.status(404).send({
-                'msg': 'No user found.'
-            });
-
-        try {
-
-            var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
-            if (!passwordIsValid)
-                return res.status(401).send({ auth: false, token: null });
-
-            var token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, {
-                expiresIn: 86400 // expires in 24 hours
-            });
-
-            res.status(200).send({ auth: true, token: token });
-
-        }
-        catch (error) {
-            next(error);
-        }
-
-    });
-}
