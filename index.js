@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const winston = require('winston');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+var helmet = require('helmet');
 
 const constants = require('./config/constant');
 const routes = require('./routes');
 
 require('./config/db');
+app.use(helmet());
 
 app.use(bodyParser.json());
 
@@ -41,4 +44,4 @@ app.use(function logErrors (err, req, res, next) {
     res.sendStatus(500);
 });
 
-app.listen(constants.appPort, () => console.log(`Example app listening on port ${constants.appPort}!`))
+app.listen(process.env.APP_PORT, () => console.log(`Taxi app listening on port ${process.env.APP_PORT}!`))

@@ -65,16 +65,14 @@ exports.create = function (req, res) {
         end_time: req.body.end_time,
     };
 
-    // var order = new Order(orderObj);
-
-    Order.save(orderObj,
-        function (err) {
+    Order.create(orderObj,
+        function (err, x) {
             if (err) {
 
                 return res.status(500).send("There was a problem create the Order.")
             }
 
-            return res.status(200).send({ Order: 'success' });
+            return res.status(200).send({ Order: x._id});
         });
 
 };

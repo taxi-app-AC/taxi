@@ -45,7 +45,6 @@ const OrderShema = new Schema({
     }
 });
 
-
 Schema.pre('save', function(next) {
     // get the current date
     var currentDate = new Date();

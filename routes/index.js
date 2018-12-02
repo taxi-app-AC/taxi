@@ -1,4 +1,4 @@
-const app = module.exports = require('express')();
+const app = require('express')();
 
 app.use('/api/auth', require('./auth'));
 app.use('/api/order', require('./order'));
@@ -7,3 +7,5 @@ app.use('/api/order', require('./order'));
 app.all('*', (req, res) => {
     res.status(404).send({msg: 'not found'});
 });
+
+module.exports = app;
