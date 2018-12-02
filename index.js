@@ -3,11 +3,12 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const helmet = require('helmet');
+const winston = require('winston');
 
 const constants = require('./config/constant');
 require('./config/db');
 const routes = require('./routes');
-const logger = require('./utils/logger/logger')
+const logger = require('./utils/logger')
 
 app.use(helmet());
 
