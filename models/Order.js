@@ -44,38 +44,57 @@ const OrderShema = new Schema({
        type: Number
     }
 });
-exports.a = function () {
-    // res.status(200).send({ Order: 'success' });
-    console.log('ahhhhhhh');
-};
 
-exports.insertOrder = function (req, res){
-    let orderObj = {
-        currently_place:{
-            lon:req.body.currently_place.lon,
-            lat:req.body.currently_place.lat
-        },
-        where_to:{
-            lon: req.body.where_to.lon,
-            lat: req.body.where_to.lat
-        },
-        km: req.body.km,
-        amount: req.body.amount,
-        transmitter: req.body.transmitter,
-        phone: req.body.phone,
-        start_time: req.body.start_time,
-        end_time: req.body.end_time,
-    };
 
-    this.create(orderObj,
-        function (err) {
-            if (err) {
+Schema.pre('save', function(next) {
+    // get the current date
+    var currentDate = new Date();
 
-                return res.status(500).send("There was a problem create the Order.")
-            }
+    console.log(currentDate);
 
-            return res.status(200).send({ Order: 'success' });
-        });
-};
+    //
+    // // change the updated_at field to current date
+    // this.updated_at = currentDate;
+    //
+    // // if created_at doesn't exist, add to that field
+    // if (!this.created_at)
+    //     this.created_at = currentDate;
+
+    next();
+});
+
+// exports.a = function () {
+//     // res.status(200).send({ Order: 'success' });
+//     console.log('ahhhhhhh');
+// };
+//
+// exports.insertOrder = function (req, res){
+//     let orderObj = {
+//         currently_place:{
+//             lon:req.body.currently_place.lon,
+//             lat:req.body.currently_place.lat
+//         },
+//         where_to:{
+//             lon: req.body.where_to.lon,
+//             lat: req.body.where_to.lat
+//         },
+//         km: req.body.km,
+//         amount: req.body.amount,
+//         transmitter: req.body.transmitter,
+//         phone: req.body.phone,
+//         start_time: req.body.start_time,
+//         end_time: req.body.end_time,
+//     };
+//
+//     this.create(orderObj,
+//         function (err) {
+//             if (err) {
+//
+//                 return res.status(500).send("There was a problem create the Order.")
+//             }
+//
+//             return res.status(200).send({ Order: 'success' });
+//         });
+// };
 
 module.exports = mongoose.model('Order', OrderShema, 'order');
