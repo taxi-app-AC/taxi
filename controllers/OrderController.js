@@ -48,7 +48,6 @@ exports.create = function (req, res) {
     //     "end_time": 154544
     // }
 
-
     let orderObj = {
         currently_place:{
             lon:req.body.currently_place.lon,

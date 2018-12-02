@@ -44,6 +44,24 @@ const OrderShema = new Schema({
        type: Number
     }
 });
+
+Schema.pre('save', function(next) {
+    // get the current date
+    var currentDate = new Date();
+
+    console.log(currentDate);
+
+    //
+    // // change the updated_at field to current date
+    // this.updated_at = currentDate;
+    //
+    // // if created_at doesn't exist, add to that field
+    // if (!this.created_at)
+    //     this.created_at = currentDate;
+
+    next();
+});
+
 // exports.a = function () {
 //     // res.status(200).send({ Order: 'success' });
 //     console.log('ahhhhhhh');
