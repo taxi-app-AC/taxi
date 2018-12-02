@@ -45,6 +45,7 @@ const OrderShema = new Schema({
     }
 });
 
+/*
 Schema.pre('save', function(next) {
     // get the current date
     var currentDate = new Date();
@@ -61,6 +62,7 @@ Schema.pre('save', function(next) {
 
     next();
 });
+*/
 
 // exports.a = function () {
 //     // res.status(200).send({ Order: 'success' });

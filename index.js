@@ -37,7 +37,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(function logErrors (err, req, res, next) {
     console.error(err.stack);
 
-    logger.error(err.stack);
+    logger.log('error', err.stack);
 
     res.sendStatus(500);
 });
