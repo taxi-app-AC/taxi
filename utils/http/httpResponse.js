@@ -1,4 +1,4 @@
-const httpResponseMessages = require('../config/httpResponseMessages');
+const httpResponseMessages = require('./httpResponseMessages');
 
 const data = {};
 
@@ -10,15 +10,21 @@ const data = {};
  *          detail: http://wwww.taxi.com/api/doc/client
  *      }]
  */
-errors = [];
+let errors = [];
 
-const createResponse = (code) => {
+const createResponse = (code = null, msg = '') => {
 
-    let res = httpResponseMessages[code];
+    if(code) {
+        let res = httpResponseMessages[code];
 
-    res = Object.assign({status: code}, res);
+        res = Object.assign({status: code}, res);
 
-    return res;
+        return res;
+    }
+    else if(msg) {
+
+        return {msg};
+    }
 }
 
 exports.addError = (code) => {
@@ -32,9 +38,9 @@ exports.addError = (code) => {
     };
 };
 
-exports.getError = (code) => {
+exports.getError = (code, msg) => {
 
-    let error  = createResponse(code);
+    let error  = createResponse(code, msg);
 
     return {
         errors: [error]

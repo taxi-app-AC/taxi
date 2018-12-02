@@ -1,5 +1,9 @@
 const app = require('express')();
 
+const authentication = require('../middlewares/authentication') ;
+
+app.use(authentication);
+
 app.use('/api/auth', require('./auth'));
 app.use('/api/order', require('./order'));
 
