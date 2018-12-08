@@ -6,7 +6,8 @@ const userAuthentication = jwt({ secret: process.env.AUTH_SECRET })
     .unless({
         path: [
             '/api/auth/register',
-            '/api/auth/login'
+            '/api/auth/login',
+            '/api/auth/upload'
         ],
     });
 

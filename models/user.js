@@ -14,10 +14,6 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
-        'allowedExts': ['gif', 'jpeg', 'jpg', 'png', 'svg', 'blob'],
-        'allowedMimeTypes': ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png', 'image/svg+xml']
-    },
     active: Number
 });
 
