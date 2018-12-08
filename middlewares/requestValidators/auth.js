@@ -10,3 +10,7 @@ exports.register = [
     check('phone', 'Phone is required').exists(),
     check('password', 'must be min 5 char').isLength({ min: 5 })
 ];
+
+exports.upload = [
+    check('driverImage', 'Driver image is required').exists()
+];

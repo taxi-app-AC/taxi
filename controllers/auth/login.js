@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
 
     try {
         const user =  await User.findOne({ phone: req.body.phone }, function (err, user) {
-
+            
             if (err)
                 next(err);
 

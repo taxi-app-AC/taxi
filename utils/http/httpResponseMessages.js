@@ -15,5 +15,8 @@ module.exports = {
     },
     5: {
         msg: 'Missing authentication credentials.'
+    },
+    6: {
+        msg: 'Page not found.'
     }
 }
