@@ -18,4 +18,6 @@ app.use(routes);
 
 app.use(logger.logErrors);
 
-app.listen(process.env.APP_PORT, () => console.log(`Taxi app listening on port ${process.env.APP_PORT}!`))
+app.listen(process.env.APP_PORT, () => console.log(`Taxi app listening on port ${process.env.APP_PORT}!`));
+
+module.exports = app;
