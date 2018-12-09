@@ -13,7 +13,7 @@ user.deleteMany({}, (err) => {
     }
 });
 
-describe('POST /register - Create new user for testing GET /me', () => {
+describe('POST /register - eCreate new user for testing GET /me', () => {
 
     it('respond with 201', (done) => {
 
@@ -47,6 +47,10 @@ describe('Auth GET me', function() {
             .get('/api/auth/me')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${access_token}`)
+            .expect({
+                name: 'cavid',
+                phone: '444'
+            })
             .expect(200, done);
     })
 });

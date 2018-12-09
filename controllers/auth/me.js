@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
 
         // console.log(req.protocol + '://' + req.get('Host') + req.url);
         // return res.status(200).send(req.user);
-        userModel.findById(req.user.id, 'id name phone', function (err, user) {
+        userModel.findById(req.user.id, '-_id name phone', function (err, user) {
             if (err) {
                 next(err);
 
