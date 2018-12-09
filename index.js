@@ -5,7 +5,7 @@ require('dotenv').config();
 const helmet = require('helmet');
 const winston = require('winston');
 
-const constants = require('./config/constant');
+require('./config/constant');
 require('./config/db');
 const routes = require('./routes');
 const logger = require('./utils/logger')

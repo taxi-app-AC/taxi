@@ -7,7 +7,6 @@ const userModel = require('../../models/user');
 module.exports = async (req, res, next) => {
 
     try {
-
         let user = new userModel({
             name: req.body.name,
             phone: req.body.phone,

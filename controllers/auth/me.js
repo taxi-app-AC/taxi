@@ -6,6 +6,7 @@ const httpResponse = require('../../utils/http/httpResponse');
 module.exports = async (req, res, next) => {
 
     try {
+
         // console.log(req.protocol + '://' + req.get('Host') + req.url);
         // return res.status(200).send(req.user);
         userModel.findById(req.user.id, 'id name phone', function (err, user) {
