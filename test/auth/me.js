@@ -23,11 +23,7 @@ describe('POST /register - Create new user for testing GET /me', () => {
 
         request(app)
             .post('/api/auth/register')
-            .send({
-                name: userData.name,
-                phone: userData.phone,
-                password: userData.password
-            })
+            .send(userData)
             .expect(201)
             .then(res => {
                 access_token = res.body.data.token;
@@ -44,6 +40,10 @@ describe('GET /me - Get user info', function() {
             .get('/api/auth/me')
             .expect(401, done);
     });
+
+    it('respond 401 with wrong token', (done) => {
+        
+    })
 
     it('respond success', function(done) {
 
