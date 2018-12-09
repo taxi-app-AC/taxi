@@ -21,7 +21,6 @@ app.use(logger.logErrors);
 let app_port = process.env.APP_PORT;
 
 if(process.env.NODE_ENV === 'test') {
-    console.log('test');
     app_port = process.env.APP_PORT_TEST;
 }
 

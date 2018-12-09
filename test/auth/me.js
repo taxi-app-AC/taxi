@@ -4,7 +4,11 @@ const app = require('../../index');
 
 const user = new require('../../models/user');
 
-let access_token = '';
+let userData = {
+    name: 'cavid',
+    phone: '55852456',
+    password: '123456'
+};
 
 user.deleteMany({}, (err) => {
 
@@ -13,16 +17,16 @@ user.deleteMany({}, (err) => {
     }
 });
 
-describe('POST /register - eCreate new user for testing GET /me', () => {
+describe('POST /register - Create new user for testing GET /me', () => {
 
     it('respond with 201', (done) => {
 
         request(app)
             .post('/api/auth/register')
             .send({
-                name: 'cavid',
-                phone: '444',
-                password: '111xxx222'
+                name: userData.name,
+                phone: userData.phone,
+                password: userData.password
             })
             .expect(201)
             .then(res => {
@@ -32,7 +36,7 @@ describe('POST /register - eCreate new user for testing GET /me', () => {
     })
 })
 
-describe('Auth GET me', function() {
+describe('GET /me - Get user info', function() {
 
     it('respond with 401 without token', function(done) {
 
@@ -48,8 +52,8 @@ describe('Auth GET me', function() {
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${access_token}`)
             .expect({
-                name: 'cavid',
-                phone: '444'
+                name: userData.name,
+                phone: userData.phone
             })
             .expect(200, done);
     })
