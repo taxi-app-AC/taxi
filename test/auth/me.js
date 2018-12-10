@@ -1,4 +1,8 @@
 const request = require('supertest');
+const chai = require('chai');
+var assert = chai.assert;
+var expect = chai.expect;
+var should = chai.should();
 
 const app = require('../../index');
 
@@ -42,14 +46,22 @@ describe('GET /me - Get user info', function() {
     });
 
     it('respond 401 with wrong token', (done) => {
-        
-    })
+
+        request(app)
+            .get('/api/auth/me')
+            .set('Authorization', `Bearer wrongbearerfortesting`)
+            .expect(401)
+            .then(res => {
+                assert.property(res.body, 'errors');
+                assert.equal(res.body.errors[0].status, 5);
+                done();
+            });
+    });
 
     it('respond success', function(done) {
 
         request(app)
             .get('/api/auth/me')
-            .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${access_token}`)
             .expect({
                 name: userData.name,
