@@ -18,5 +18,11 @@ module.exports = {
     },
     6: {
         msg: 'Page not found.'
-    }
+    },
+    7: {
+        msg: 'Image does\'t exist.'
+    },
+    8: {
+        msg: 'File mimeType isn\'t correct.'
+    },
 }

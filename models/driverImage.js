@@ -5,7 +5,11 @@ const DriverSchema = new Schema({
     driverImage: {
         type: String,
         required: true
+    },
+    driverLicenseImage: {
+        type: String,
+        required: true
     }
 });
 
-module.exports = mongoose.model('driverImage', DriverSchema, 'driverImages');
+module.exports = mongoose.model('driverImages', DriverSchema, 'driverImages');

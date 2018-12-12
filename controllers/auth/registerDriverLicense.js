@@ -2,19 +2,25 @@ const httpResponse = require('../../utils/http/httpResponse');
 const DriverImageModel = require('../../models/driverImage');
 const multer = require('multer');
 
-const arrMimeType = ['image/gif', 'image/jpeg', 'image/jpg', 'image/x-png', 'image/png', 'image/svg+xml'];
+const arrMimeType = ['image/gif', 'image/jpg', 'image/jpeg', 'image/x-png', 'image/png', 'image/svg+xml'];
 
-const fileFilter = (req, file, res) => {
-    let mimeType = file.mimetype;
+const fileFilter = (req, file, cb) => {
 
-    if (arrMimeType.indexOf(mimeType.toString()) != -1){
-        res(null, true);
+    if ('fieldname' in file) {
+
+        if (arrMimeType.indexOf(file.mimetype) != -1) {
+            cb(null, true);
+        } else {
+            return cb(res.end('Only images are allowed'), null)
+        }
     }else{
-        res(null, false)
+        return cb(new Error(httpResponse.getError(7).errors[0].msg))
     }
 };
 const storage = multer.diskStorage({
    destination: (req, file, res) => {
+       //console.log('heee')
+       //console.log(req.files)
         res(null, './uploads/drivers/');
    },
     filename: (req, file, res) => {
@@ -23,6 +29,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
     storage: storage,
+    onError : function(err, next) {
+        // console.log('error', err);
+        // next(err);
+    },
     limits : {
         fieldSize: 1024 * 1024 * 5
     },
@@ -30,23 +40,28 @@ const upload = multer({
 });
 
 const insertToDB = async (req, res, next) => {
-    console.log(req.file)
+
     try {
 
-        if (req.file){
-            let driverImage = new DriverImageModel({
-                driverImage: req.file.path
-            });
+        if(!req.files.driverImage || !req.files.driverLicenseImage) {
+            res.status(400).send(httpResponse.getError(7));
         }
 
+        varDriveImage = req.files.driverImage[0];
+        varDriveLicenseImage = req.files.driverLicenseImage[0];
 
-        let error = driverImage.validateSync();
+        let driverImages = new DriverImageModel({
+            driverImage: varDriveImage.path,
+            driverLicenseImage: varDriveLicenseImage.path
+        });
+
+        let error = driverImages.validateSync();
 
         if (error){
             return res.status(400).send(httpResponse.getError(null, error.message));
         }
 
-        await driverImage.save(function (err) {
+        await driverImages.save(function (err) {
 
             if (err) {
 
@@ -55,7 +70,9 @@ const insertToDB = async (req, res, next) => {
         });
 
         return res.status(200).send(httpResponse.success({
-            image: image.driverImage
+            driverImage: driverImages.driverImage,
+            driverLicenseImage: driverImages.driverLicenseImage
+
         }));
 
     }
@@ -65,6 +82,6 @@ const insertToDB = async (req, res, next) => {
 };
 
 module.exports = [
-    upload.single('driverImg'),
+    upload.fields([{ name: 'driverImage', maxCount: 1 }, { name: 'driverLicenseImage', maxCount: 1 }]),
     insertToDB
 ];

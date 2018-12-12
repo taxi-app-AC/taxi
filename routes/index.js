@@ -1,5 +1,6 @@
 const app = require('express')();
 
+const expressValidator = require('express-validator');
 const authentication = require('../middlewares/authentication') ;
 const httpResponse = require('../utils/http/httpResponse');
 
