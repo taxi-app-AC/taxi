@@ -1,4 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/taxi', { useNewUrlParser: true });
+let db = process.env.DB;
+
+if(process.env.NODE_ENV === 'test') {
+    db = process.env.DB_TEST;
+}
+
+mongoose.connect(`mongodb://localhost:27017/${db}`, { useNewUrlParser: true });
 

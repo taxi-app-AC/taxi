@@ -11,6 +11,8 @@ app.use('/api/order', require('./order'));
 
 // the catch all route
 app.all('*', (req, res) => {
+    console.log('-test-'+req.protocol + '://' + req.get('Host') + req.url);
+    // return res.send(200);
     res.status(404).send(httpResponse.getError(6));
 });
 

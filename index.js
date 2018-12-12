@@ -5,7 +5,7 @@ require('dotenv').config();
 const helmet = require('helmet');
 const winston = require('winston');
 
-const constants = require('./config/constant');
+require('./config/constant');
 require('./config/db');
 const routes = require('./routes');
 const logger = require('./utils/logger')
@@ -18,4 +18,12 @@ app.use(routes);
 
 app.use(logger.logErrors);
 
-app.listen(process.env.APP_PORT, () => console.log(`Taxi app listening on port ${process.env.APP_PORT}!`))
+let app_port = process.env.APP_PORT;
+
+if(process.env.NODE_ENV === 'test') {
+    app_port = process.env.APP_PORT_TEST;
+}
+
+app.listen(app_port, () => console.log(`Taxi app listening on port ${app_port}!`));
+
+module.exports = app;
