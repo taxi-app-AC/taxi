@@ -17,5 +17,5 @@ exports.logErrors = (err, req, res, next) => {
 
     logger.log('error', err.stack);
 
-    res.sendStatus(500);
+    //res.sendStatus(500);
 }

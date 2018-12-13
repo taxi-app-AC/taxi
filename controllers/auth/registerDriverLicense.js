@@ -6,6 +6,8 @@ const arrMimeType = ['image/gif', 'image/jpg', 'image/jpeg', 'image/x-png', 'ima
 
 const fileFilter = (req, file, cb) => {
 
+    console.log('filesssss', req.files);
+
     if ('fieldname' in file) {
 
         if (arrMimeType.indexOf(file.mimetype) != -1) {
@@ -19,7 +21,7 @@ const fileFilter = (req, file, cb) => {
 };
 const storage = multer.diskStorage({
    destination: (req, file, res) => {
-       //console.log('heee')
+       console.log('heee')
        //console.log(req.files)
         res(null, './uploads/drivers/');
    },
@@ -29,10 +31,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
     storage: storage,
-    onError : function(err, next) {
-        // console.log('error', err);
-        // next(err);
-    },
+    // onError : function(err, next) {
+    //     // console.log('error', err);
+    //     next(err);
+    // },
     limits : {
         fieldSize: 1024 * 1024 * 5
     },
@@ -41,6 +43,8 @@ const upload = multer({
 
 const insertToDB = async (req, res, next) => {
 
+    console.log('inerrtttttt');
+    console.log(req.files);
     try {
 
         if(!req.files.driverImage || !req.files.driverLicenseImage) {
@@ -82,6 +86,6 @@ const insertToDB = async (req, res, next) => {
 };
 
 module.exports = [
-    upload.fields([{ name: 'driverImage', maxCount: 1 }, { name: 'driverLicenseImage', maxCount: 1 }]),
+    //upload.fields([{ name: 'driverImage', maxCount: 1 }, { name: 'driverLicenseImage', maxCount: 1 }]),
     insertToDB
 ];
