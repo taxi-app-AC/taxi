@@ -26,34 +26,6 @@ const fileUpload = require('express-fileupload');
 router.use(fileUpload());
 
 router.post('/upload',
-    function (req, res, next) {
-    console.log(Object.keys(req.files).length);
-        //console.log(req.files);
-        let sampleFile = req.files.driverImage;
-        let sampleFile2 = req.files.driverLicenseImage;
-        if(!sampleFile || !sampleFile2) {
-            console.log('he9hefochcoiwec')
-            res.status(401).send('dsds');
-        }
-        else {
-            sampleFile.mv(__dirname+'/../uploads/drivers/filename.jpg', function(err) {
-                if (err)
-                    return res.status(500).send(err);
-
-                //res.send('File uploaded!');
-            });
-
-            sampleFile2.mv(__dirname+'/../uploads/drivers/filename2.jpg', function(err) {
-                if (err)
-                    return res.status(500).send(err);
-
-                //res.send('File2 uploaded!');
-            });
-        }
-
-        // Use the mv() method to place the file somewhere on your server
-
-    },
     Upload
 );
 

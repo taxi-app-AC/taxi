@@ -14,6 +14,14 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    image: {
+        driverImage: {
+            type: String,
+        },
+        driverLicenseImage: {
+            type: String,
+        }
+    },
     active: Number
 });
 

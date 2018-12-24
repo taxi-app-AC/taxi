@@ -1,84 +1,107 @@
 const httpResponse = require('../../utils/http/httpResponse');
 const DriverImageModel = require('../../models/driverImage');
-const multer = require('multer');
+const UserModel = require('../../models/user');
 
 const arrMimeType = ['image/gif', 'image/jpg', 'image/jpeg', 'image/x-png', 'image/png', 'image/svg+xml'];
 
-const fileFilter = (req, file, cb) => {
+const uploadImage = function (req, res, next) {
 
-    console.log('filesssss', req.files);
+    let driverImage = req.files.driverImage;
+    let driverLicenseImage = req.files.driverLicenseImage;
 
-    if ('fieldname' in file) {
+    if(Object.keys(req.files).length < 2){
+        res.status(401).send(httpResponse.getError(7))
+    } else if (arrMimeType.indexOf(driverImage.mimetype) == -1 || arrMimeType.indexOf(driverLicenseImage.mimetype) == -1){
+        res.status(401).send(httpResponse.getError(8))
+    }else {
 
-        if (arrMimeType.indexOf(file.mimetype) != -1) {
-            cb(null, true);
-        } else {
-            return cb(res.end('Only images are allowed'), null)
+        let driverImageName = Number(new Date) + req.files.driverImage.name;
+        let driverLicenseImageName = Number(new Date) + req.files.driverLicenseImage.name;
+
+        driverImage.path = __dirname + '/uploads/drivers/' + driverImageName;
+        driverLicenseImage.path = __dirname + '/uploads/drivers/' + driverLicenseImageName;
+
+        if(!driverImage || !driverLicenseImage) {
+            res.status(401).send(httpResponse.getError(7));
         }
-    }else{
-        return cb(new Error(httpResponse.getError(7).errors[0].msg))
+        else {
+
+            driverImage.mv(__dirname + '/../../uploads/drivers/' + driverImageName, function(err) {
+
+                if (err) return res.status(500).send(err);
+            });
+
+            driverLicenseImage.mv(__dirname + '/../../uploads/drivers/' + driverLicenseImageName, function(err) {
+
+                if (err) return res.status(500).send(err);
+            });
+
+            next();
+        }
     }
 };
-const storage = multer.diskStorage({
-   destination: (req, file, res) => {
-       console.log('heee')
-       //console.log(req.files)
-        res(null, './uploads/drivers/');
-   },
-    filename: (req, file, res) => {
-       res(null, Number(new Date) + file.originalname);
-    }
-});
-const upload = multer({
-    storage: storage,
-    // onError : function(err, next) {
-    //     // console.log('error', err);
-    //     next(err);
-    // },
-    limits : {
-        fieldSize: 1024 * 1024 * 5
-    },
-    fileFilter: fileFilter
-});
 
 const insertToDB = async (req, res, next) => {
 
-    console.log('inerrtttttt');
-    console.log(req.files);
     try {
 
         if(!req.files.driverImage || !req.files.driverLicenseImage) {
             res.status(400).send(httpResponse.getError(7));
-        }
+        }else {
 
-        varDriveImage = req.files.driverImage[0];
-        varDriveLicenseImage = req.files.driverLicenseImage[0];
+            varDriveImage = req.files.driverImage;
+            varDriveLicenseImage = req.files.driverLicenseImage;
 
-        let driverImages = new DriverImageModel({
-            driverImage: varDriveImage.path,
-            driverLicenseImage: varDriveLicenseImage.path
-        });
+            let driverImages = new DriverImageModel({
+                driverImage: varDriveImage.path,
+                driverLicenseImage: varDriveLicenseImage.path
+            });
 
-        let error = driverImages.validateSync();
+            let UserImages = new UserModel({
+                image: {
+                    driverImage: varDriveImage.path,
+                    driverLicenseImage: varDriveLicenseImage.path
+                }
+            });
 
-        if (error){
-            return res.status(400).send(httpResponse.getError(null, error.message));
-        }
+            let error = driverImages.validateSync();
 
-        await driverImages.save(function (err) {
-
-            if (err) {
-
-                next(err);
+            if (error){
+                return res.status(400).send(httpResponse.getError(null, error.message));
             }
-        });
 
-        return res.status(200).send(httpResponse.success({
-            driverImage: driverImages.driverImage,
-            driverLicenseImage: driverImages.driverLicenseImage
+            await UserModel.update(
+                {_id: '5bf4628b67d9391d244cca6d'},
+                { $push: { friends: 'abbas' } },
+            );
 
-        }));
+            // UserModel.find({_id: '5bf4628b67d9391d244cca6d'}, {
+            //     image: {
+            //         driverImage: varDriveImage.path,
+            //         driverLicenseImage: varDriveLicenseImage.path
+            //     }
+            // }, function(err) {
+            //
+            //     if (err) {
+            //
+            //         next(err);
+            //     }
+            // });
 
+            // await driverImages.save(function (err) {
+            //
+            //     if (err) {
+            //
+            //         next(err);
+            //     }
+            // });
+
+            return res.status(200).send(httpResponse.success({
+                driverImage: driverImages.driverImage,
+                driverLicenseImage: driverImages.driverLicenseImage
+
+            }));
+        }
     }
     catch (e) {
         next(e);
@@ -86,6 +109,6 @@ const insertToDB = async (req, res, next) => {
 };
 
 module.exports = [
-    //upload.fields([{ name: 'driverImage', maxCount: 1 }, { name: 'driverLicenseImage', maxCount: 1 }]),
+    uploadImage,
     insertToDB
 ];
