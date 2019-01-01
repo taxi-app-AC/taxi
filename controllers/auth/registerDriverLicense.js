@@ -10,9 +10,9 @@ const uploadImage = function (req, res, next) {
     let driverLicenseImage = req.files.driverLicenseImage;
 
     if(Object.keys(req.files).length < 2){
-        res.status(401).send(httpResponse.getError(7))
+        return res.status(401).send(httpResponse.getError(7))
     } else if (arrMimeType.indexOf(driverImage.mimetype) == -1 || arrMimeType.indexOf(driverLicenseImage.mimetype) == -1){
-        res.status(401).send(httpResponse.getError(8))
+        return res.status(401).send(httpResponse.getError(8))
     }else {
 
         let driverImageName = Number(new Date) + req.files.driverImage.name;
@@ -22,7 +22,7 @@ const uploadImage = function (req, res, next) {
         driverLicenseImage.path = __dirname + '/uploads/drivers/' + driverLicenseImageName;
 
         if(!driverImage || !driverLicenseImage) {
-            res.status(401).send(httpResponse.getError(7));
+            return res.status(401).send(httpResponse.getError(7));
         }
         else {
 
@@ -46,7 +46,7 @@ const insertToDB = async (req, res, next) => {
     try {
 
         if(!req.files.driverImage || !req.files.driverLicenseImage) {
-            res.status(400).send(httpResponse.getError(7));
+            return res.status(400).send(httpResponse.getError(7));
         }else {
 
             varDriveImage = req.files.driverImage;
@@ -71,8 +71,8 @@ const insertToDB = async (req, res, next) => {
             }
 
             await UserModel.update(
-                {_id: '5bf4628b67d9391d244cca6d'},
-                { $push: { friends: 'abbas' } },
+                {_id: '5c0eb9e1da9f354c03cc44af'},
+                { $set: { friends: 'abbas' } },
             );
 
             // UserModel.find({_id: '5bf4628b67d9391d244cca6d'}, {
