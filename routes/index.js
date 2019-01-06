@@ -17,10 +17,10 @@ app.use('/api/order', require('./order'));
 app.use('/api/user', require('./user'));
 
 // the catch all route
-app.all('*', (req, res) => {
+/*app.all('*', (req, res) => {
     console.log('-test-' + req.protocol + '://' + req.get('Host') + req.url);
     // return res.send(200);
     res.status(404).send(httpResponse.getError(6));
-});
+});*/
 
 module.exports = app;

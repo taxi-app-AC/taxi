@@ -16,11 +16,12 @@ const logger = require('./utils/logger');
 app.use(helmet());
 
 app.use(bodyParser.json());
-
+const Me = require('./controllers/auth/me');
 var schema = buildSchema(`
   type Query {
     hello: String,
-    course(id: Int!): Course
+    course(id: Int!): Course,
+    me: Me
   },
    type Course {
         id: Int
@@ -29,7 +30,11 @@ var schema = buildSchema(`
         description: String
         topic: String
         url: String
-    }
+   },
+   type Me {
+        name: String,
+        phone: String
+   }
 `);
 var coursesData = [
     {
@@ -66,16 +71,28 @@ var getCourse = function(args) {
 
 var root = {
     hello: () => 'Hello world!',
-    course: getCourse
+    course: getCourse,
+    me: Me
 };
 
-app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-}));
-
 app.use(routes);
+
+app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
+    // console.log(request.headers);
+    return {
+            schema: schema,
+            rootValue: root,
+            graphiql: true ,
+            context: {
+                req: request,
+                res: response,
+                test: 'Example context value'
+            }
+        }
+    }
+));
+
+
 
 app.use(logger.logErrors);
 
