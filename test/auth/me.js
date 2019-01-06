@@ -34,7 +34,7 @@ describe('POST /register - Create new user for testing GET /me', () => {
                 done();
             })
     })
-})
+});
 
 describe('GET /me - Get user info', function() {
 

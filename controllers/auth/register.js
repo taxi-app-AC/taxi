@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
         };
 
         let token = jwt.sign(payload, process.env.AUTH_SECRET, {
-                expiresIn: 86400 // expires in 24 hours
+                expiresIn: 30 * 86400 // expires in 24 hours
             }
         );
 

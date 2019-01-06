@@ -11,7 +11,7 @@ var { buildSchema } = require('graphql');
 require('./config/constant');
 require('./config/db');
 const routes = require('./routes');
-const logger = require('./utils/logger')
+const logger = require('./utils/logger');
 
 app.use(helmet());
 

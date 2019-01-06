@@ -7,8 +7,8 @@ const userAuthentication = jwt({ secret: process.env.AUTH_SECRET })
         path: [
             '/api/auth/register',
             '/api/auth/login',
-            '/api/auth/upload'
-        ],
+            '/api/auth/upload',
+        ]
     });
 
 const authErrorHandler = (err, req, res, next) => {
