@@ -10,4 +10,8 @@ router.get('/:id',
     User.getUser
 );
 
+router.get('/:id/:active',
+    User.changeActive
+);
+
 module.exports = router;
