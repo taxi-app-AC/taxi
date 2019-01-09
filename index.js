@@ -5,8 +5,6 @@ require('dotenv').config();
 const helmet = require('helmet');
 const winston = require('winston');
 
-var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
 
 require('./config/constant');
 require('./config/db');
@@ -16,83 +14,8 @@ const logger = require('./utils/logger');
 app.use(helmet());
 
 app.use(bodyParser.json());
-const Me = require('./controllers/auth/me');
-var schema = buildSchema(`
-  type Query {
-    hello: String,
-    course(id: Int!): Course,
-    me: Me
-  },
-   type Course {
-        id: Int
-        title: String
-        author: String
-        description: String
-        topic: String
-        url: String
-   },
-   type Me {
-        name: String,
-        phone: String
-   }
-`);
-var coursesData = [
-    {
-        id: 1,
-        title: 'The Complete Node.js Developer Course',
-        author: 'Andrew Mead, Rob Percival',
-        description: 'Learn Node.js by building real-world applications with Node, Express, MongoDB, Mocha, and more!',
-        topic: 'Node.js',
-        url: 'https://codingthesmartway.com/courses/nodejs/'
-    },
-    {
-        id: 2,
-        title: 'Node.js, Express & MongoDB Dev to Deployment',
-        author: 'Brad Traversy',
-        description: 'Learn by example building & deploying real-world Node.js applications from absolute scratch',
-        topic: 'Node.js',
-        url: 'https://codingthesmartway.com/courses/nodejs-express-mongodb/'
-    },
-    {
-        id: 3,
-        title: 'JavaScript: Understanding The Weird Parts',
-        author: 'Anthony Alicea',
-        description: 'An advanced JavaScript course for everyone! Scope, closures, prototypes, this, build your own framework, and more.',
-        topic: 'JavaScript',
-        url: 'https://codingthesmartway.com/courses/understand-javascript/'
-    }
-]
-var getCourse = function(args) {
-    var id = args.id;
-    return coursesData.filter(course => {
-        return course.id == id;
-    })[0];
-}
-
-var root = {
-    hello: () => 'Hello world!',
-    course: getCourse,
-    me: Me
-};
 
 app.use(routes);
-
-app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
-    // console.log(request.headers);
-    return {
-            schema: schema,
-            rootValue: root,
-            graphiql: true ,
-            context: {
-                req: request,
-                res: response,
-                test: 'Example context value'
-            }
-        }
-    }
-));
-
-
 
 app.use(logger.logErrors);
 

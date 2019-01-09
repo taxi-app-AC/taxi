@@ -1,8 +1,11 @@
 const app = require('express')();
+var graphqlHTTP = require('express-graphql');
 
 const expressValidator = require('express-validator');
 const authentication = require('../middlewares/authentication') ;
 const httpResponse = require('../utils/http/httpResponse');
+const schema = require('../graphql/schemas/index');
+const Me = require('../controllers/auth/me');
 
 app.use(authentication);
 
@@ -11,6 +14,25 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization, Content-Type");
     next();
 });
+
+var root = {
+    me: Me
+};
+
+app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
+        // console.log(request.headers);
+        return {
+            schema: schema,
+            rootValue: root,
+            graphiql: true ,
+            context: {
+                req: request,
+                res: response,
+                test: 'Example context value'
+            }
+        }
+    }
+));
 
 app.use('/api/auth', require('./auth'));
 app.use('/api/order', require('./order'));
