@@ -8,12 +8,13 @@ module.exports = async (req, res, next) => {
 
     try {
         const user =  await User.findOne({ phone: req.body.phone }, function (err, user) {
-            
+
             if (err)
                 next(err);
 
             if (!user) {
-                return res.status(404).send(httpResponse.getError(2));
+
+                return res.status(401).send(httpResponse.getError(1));
             }
 
         });
@@ -26,7 +27,7 @@ module.exports = async (req, res, next) => {
         }
 
         let token = await jwt.sign({ id: user._id }, process.env.AUTH_SECRET, {
-            expiresIn: 30 * 86400 // expires in 24 hours
+            expiresIn: 30 * 86400 // expires in 30 days
         });
 
         res.status(200).send(httpResponse.success({
@@ -38,4 +39,4 @@ module.exports = async (req, res, next) => {
     catch (e) {
         next(e);
     }
-}
+};
