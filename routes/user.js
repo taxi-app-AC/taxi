@@ -14,4 +14,8 @@ router.get('/:id/:active',
     User.changeActive
 );
 
+router.get('/accept/:id/:request',
+    User.acceptOrDecline
+);
+
 module.exports = router;

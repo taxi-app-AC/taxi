@@ -11,7 +11,9 @@ module.exports = async (req, res, next) => {
             name: req.body.name,
             phone: req.body.phone,
             password: req.body.password,
-            active: 1
+            active: 1,
+            driver: 0,
+            view: 0
         });
 
         let error = user.validateSync();
