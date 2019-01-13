@@ -22,7 +22,9 @@ const UserSchema = new Schema({
             type: String,
         }
     },
-    active: Number
+    active: Number,
+    driver: Number,
+    view: Number
 });
 
 module.exports = mongoose.model('User', UserSchema, 'user');

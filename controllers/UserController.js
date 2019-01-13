@@ -51,5 +51,29 @@ exports.changeActive = async (req, res, next) => {
 
     res.status(200).send(httpResponse.success({
         active: (active == 1) ? true : false
-    }))
+    }));
+};
+
+exports.acceptOrDecline = async (req, res, next) => {
+    let id = req.params.id;
+    let accept = req.params.status;
+    let query = { _id: id };
+
+    await User.findOneAndUpdate(
+        query,
+        {
+            "active" : accept,
+            "view": 1
+        },
+        (err, user) => {
+
+            if (err) next(err);
+
+            if (!user) return res.status(401).send(httpResponse.getError(2));
+        }
+    );
+
+    res.status(200).send(httpResponse.success({
+        request: (accept == 1) ? 'accept' : 'decline'
+    }));
 };
