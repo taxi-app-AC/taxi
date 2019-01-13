@@ -49,7 +49,7 @@ exports.changeActive = async (req, res, next) => {
 
 exports.acceptOrDecline = async (req, res, next) => {
     let id = req.params.id;
-    let accept = req.params.request;
+    let accept = req.params.status;
     let query = { _id: id };
 
     await User.findOneAndUpdate(

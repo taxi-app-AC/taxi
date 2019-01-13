@@ -14,7 +14,7 @@ router.get('/:id/:active',
     User.changeActive
 );
 
-router.get('/accept/:id/:request',
+router.get('/request/:id/:status',
     User.acceptOrDecline
 );
 
