@@ -7,8 +7,10 @@ const httpResponse = require('../utils/http/httpResponse');
 const schema = require('../graphql/schemas/index');
 const Me = require('../controllers/auth/me');
 const { getUsers } = require('../controllers/UserController');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
-app.use(authentication);
+//app.use(authentication);
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -21,7 +23,7 @@ var root = {
     users: getUsers
 };
 
-app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
+app.use('/graphql', cors(), graphqlHTTP((request, response, graphQLParams) => {
         // console.log(request.headers);
         return {
             schema: schema,
