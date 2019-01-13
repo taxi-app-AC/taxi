@@ -1,16 +1,23 @@
 const User = require('../models/user');
 const httpResponse = require('../utils/http/httpResponse');
 
-exports.getUsers = (req, res, next) => {
+exports.getUsers = async (args, context) => {
 
-    User.find({}, (err, users) => {
+    try {
+        let users = await User.find({}, (err, users) => {
 
-        if (err) next(err);
+            // if (err) next(err);
 
-        if (!users) return res.status(401).send(httpResponse.getError(2));
+            if (!users) context.res.status(401).send(httpResponse.getError(2));
 
-        res.send(users);
-    });
+        });
+
+        console.log(users);
+
+        return users;
+    }catch (e) {
+        console.log(e)
+    }
 };
 
 exports.getUser = (req, res, next) => {

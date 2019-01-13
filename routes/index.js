@@ -6,6 +6,7 @@ const authentication = require('../middlewares/authentication') ;
 const httpResponse = require('../utils/http/httpResponse');
 const schema = require('../graphql/schemas/index');
 const Me = require('../controllers/auth/me');
+const { getUsers } = require('../controllers/UserController');
 
 app.use(authentication);
 
@@ -16,7 +17,8 @@ app.use(function (req, res, next) {
 });
 
 var root = {
-    me: Me
+    me: Me,
+    users: getUsers
 };
 
 app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
