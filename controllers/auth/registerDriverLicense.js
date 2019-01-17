@@ -11,7 +11,7 @@ const uploadImage = function (req, res, next) {
 
     if(Object.keys(req.files).length < 2){
         return res.status(401).send(httpResponse.getError(7))
-    } else if (arrMimeType.indexOf(driverImage.mimetype) == -1 || arrMimeType.indexOf(driverLicenseImage.mimetype) == -1){
+    } else if (arrMimeType.indexOf(driverImage.mimetype) === -1 || arrMimeType.indexOf(driverLicenseImage.mimetype) === -1){
         return res.status(401).send(httpResponse.getError(8))
     }else {
 
@@ -26,14 +26,18 @@ const uploadImage = function (req, res, next) {
         }
         else {
 
-            driverImage.mv(__dirname + '/../../uploads/drivers/' + driverImageName, function(err) {
+console.log(driverImageName)
 
+            driverImage.mv(location.hostname + '/taxi/uploads/drivers/driverImage/' + driverImageName, function(err) {
+console.log(__dirname)
                 if (err) return res.status(500).send(err);
+                console.log('heeeerrrrrr')
             });
 
-            driverLicenseImage.mv(__dirname + '/../../uploads/drivers/' + driverLicenseImageName, function(err) {
+            driverLicenseImage.mv(location.hostname + '/taxi/uploads/drivers/driverLicenseImage/' + driverLicenseImageName, function(err) {
 
                 if (err) return res.status(500).send(err);
+                console.log('heeee')
             });
 
             next();
@@ -46,7 +50,7 @@ const insertToDB = async (req, res, next) => {
     try {
 
         if(!req.files.driverImage || !req.files.driverLicenseImage) {
-            return res.status(400).send(httpResponse.getError(7));
+            return res.status(404).send(httpResponse.getError(7));
         }else {
 
             varDriveImage = req.files.driverImage;
@@ -71,8 +75,8 @@ const insertToDB = async (req, res, next) => {
             }
 
             await UserModel.update(
-                {_id: '5c0eb9e1da9f354c03cc44af'},
-                { $set: { friends: 'abbas' } },
+                {_id: '5c3204afa195202280cce6ae'},
+                { friends: 'abbas' },
             );
 
             // UserModel.find({_id: '5bf4628b67d9391d244cca6d'}, {

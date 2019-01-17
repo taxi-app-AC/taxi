@@ -10,7 +10,7 @@ const { getUsers } = require('../controllers/UserController');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-//app.use(authentication);
+// app.use(authentication);
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -28,7 +28,7 @@ app.use('/graphql', cors(), graphqlHTTP((request, response, graphQLParams) => {
         return {
             schema: schema,
             rootValue: root,
-            graphiql: true ,
+            graphiql: true,
             context: {
                 req: request,
                 res: response,

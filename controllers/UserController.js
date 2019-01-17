@@ -12,8 +12,6 @@ exports.getUsers = async (args, context) => {
 
         });
 
-        console.log(users);
-
         return users;
     }catch (e) {
         console.log(e)
