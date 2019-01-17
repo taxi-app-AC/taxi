@@ -12,7 +12,6 @@ const bodyParser = require('body-parser');
 const register = require('../controllers/auth/register');
 
 app.use(authentication);
-// console.log(0.1+0.2);
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization, Content-Type");
@@ -30,7 +29,7 @@ app.use('/graphql', cors(), graphqlHTTP((request, response, graphQLParams) => {
         return {
             schema: schema,
             rootValue: root,
-            graphiql: true ,
+            graphiql: true,
             context: {
                 req: request,
                 res: response,

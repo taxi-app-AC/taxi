@@ -36,7 +36,7 @@ console.log(args);
         };
 
         let token = jwt.sign(payload, process.env.AUTH_SECRET, {
-                expiresIn: 30 * 86400 // expires in 24 hours
+                expiresIn: 30 * 86400 // expires in 30 days
             }
         );
 
