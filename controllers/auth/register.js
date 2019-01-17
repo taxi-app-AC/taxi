@@ -4,13 +4,13 @@ const httpResponse = require('../../utils/http/httpResponse');
 
 const userModel = require('../../models/user');
 
-module.exports = async (req, res, next) => {
-
+module.exports = async (args, context) => {
+console.log(args);
     try {
         let user = new userModel({
-            name: req.body.name,
-            phone: req.body.phone,
-            password: req.body.password,
+            name: args.name,
+            phone: args.phone,
+            password: args.password,
             active: 1,
             driver: 0,
             view: 0
@@ -19,15 +19,15 @@ module.exports = async (req, res, next) => {
         let error = user.validateSync();
 
         if(error) {
-            return res.status(400).send(httpResponse.getError(null, error.message));
+            return context.res.status(400).send(httpResponse.getError(null, error.message));
         }
 
-        user.password = bcrypt.hashSync(req.body.password, 8);
+        user.password = bcrypt.hashSync(args.password, 8);
 
         await user.save(function (err) {
             if (err) {
 
-                next(err);
+                // next(err);
             }
         });
 
@@ -40,7 +40,14 @@ module.exports = async (req, res, next) => {
             }
         );
 
-        return res.status(201).send(httpResponse.success({
+        return {
+            auth: true,
+            token: token,
+            username: user.name,
+            phone: user.phone
+        };
+
+        return context.res.status(201).send(httpResponse.success({
             auth: true,
             token: token,
             username: user.name,
@@ -49,6 +56,7 @@ module.exports = async (req, res, next) => {
 
     }
     catch (e) {
-        next(e);
+        console.log(e);
+        // next(e);
     }
 };
