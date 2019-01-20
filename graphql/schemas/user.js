@@ -7,7 +7,8 @@ module.exports = makeExecutableSchema({
             me: Me
         }
         type Mutation {
-            register(name: String!, phone: String!, password: String): Me!
+            register(name: String!, phone: String!, password: String!): Me!,
+            login (phone: String!, password: String!): Login!
         }
         type User {
             id: ID,
@@ -18,8 +19,12 @@ module.exports = makeExecutableSchema({
             view: Int
         }
         type Me {
-            name: String,
-            phone: String
-       }
+            username: String!,
+            phone: String!
+        }
+        type Login {
+            auth: Boolean!
+            token: String!
+        }
     `
 });

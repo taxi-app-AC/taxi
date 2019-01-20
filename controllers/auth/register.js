@@ -5,7 +5,7 @@ const httpResponse = require('../../utils/http/httpResponse');
 const userModel = require('../../models/user');
 
 module.exports = async (args, context) => {
-console.log(args);
+
     try {
         let user = new userModel({
             name: args.name,

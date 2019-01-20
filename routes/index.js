@@ -10,8 +10,9 @@ const { getUsers } = require('../controllers/UserController');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const register = require('../controllers/auth/register');
+const login = require('../controllers/auth/login');
 
-app.use(authentication);
+// app.use(authentication);
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization, Content-Type");
@@ -21,7 +22,8 @@ app.use(function (req, res, next) {
 var root = {
     me: Me,
     users: getUsers,
-    register: register
+    register: register,
+    login: login
 };
 
 app.use('/graphql', cors(), graphqlHTTP((request, response, graphQLParams) => {
